@@ -5,18 +5,6 @@ import static com.codeborne.selenide.Selenide.*;
 public class Test {
 
     @org.junit.Test
-    public void LoginWithValidValues(){
-        open("http://users.bugred.ru/");
-        $("a[href*=\"login\"]").click();
-        $(By.name("login")).setValue("5@gmail.com");
-        $("div.col-md-6:nth-child(1) > form:nth-child(3) > " +
-                "table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(2) > " +
-                "td:nth-child(2) > input:nth-child(1)").setValue("5");
-        $("input[value= \"Авторизоваться\"]").click();
-        $(".pull-right").shouldBe(Condition.visible);
-    }
-
-    @org.junit.Test
     public void RegistrationWithValidValues(){
         open("http://users.bugred.ru/");
         $("a[href*=\"login\"]").click();
@@ -26,6 +14,18 @@ public class Test {
                 "table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(3) > " +
                 "td:nth-child(2) > input:nth-child(1)").setValue("6");
         $(By.name("act_register_now")).click();
+        $(".pull-right").shouldBe(Condition.visible);
+    }
+
+    @org.junit.Test
+    public void LoginWithValidValues(){
+        open("http://users.bugred.ru/");
+        $("a[href*=\"login\"]").click();
+        $(By.name("login")).setValue("6@gmail.com");
+        $("div.col-md-6:nth-child(1) > form:nth-child(3) > " +
+                "table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(2) > " +
+                "td:nth-child(2) > input:nth-child(1)").setValue("6");
+        $("input[value= \"Авторизоваться\"]").click();
         $(".pull-right").shouldBe(Condition.visible);
     }
 
@@ -76,6 +76,15 @@ public class Test {
     }
 
     @org.junit.Test
+    public void DeleteTask(){
+        LoginWithValidValues();
+        $("a[href=\"/tasks/index.html\"]").click();
+        $("a[href*=\"delete\"]").click();
+        sleep(2000);
+        $("a[href*=\"delete\"]").shouldBe(Condition.not(Condition.visible));
+    }
+
+    @org.junit.Test
     public void AddNewUser(){
         LoginWithValidValues();
         $(".btn-danger").click();
@@ -88,17 +97,9 @@ public class Test {
     }
 
     @org.junit.Test
-    public void DeleteTask(){
-        LoginWithValidValues();
-        $("a[href=\"/tasks/index.html\"]").click();
-        $("a[href*=\"delete\"]").click();
-        sleep(2000);
-        $("a[href*=\"delete\"]").shouldBe(Condition.not(Condition.visible));
-    }
-
-    @org.junit.Test
     public void IndicateThatTheTaskIsCompleted(){
         LoginWithValidValues();
+        CreateNewTask();
         $("a[href=\"/tasks/my/index.html\"]").click();
         $(".btn-success").click();
         $("a[href=\"/tasks/my/completes\"]").click();
@@ -109,6 +110,7 @@ public class Test {
     @org.junit.Test
     public void IndicateThatTheTaskIsNotCompleted(){
         LoginWithValidValues();
+        CreateNewTask();
         $("a[href=\"/tasks/my/index.html\"]").click();
         $(".btn-danger").click();
         $("a[href=\"/tasks/my/fails\"]").click();
